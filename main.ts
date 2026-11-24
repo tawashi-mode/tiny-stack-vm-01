@@ -1,7 +1,7 @@
 // tiny stack ISA v1 VM: node main.ts [in] [out]
 import{mkdirSync as M,readdirSync as D,readFileSync as R,writeFileSync as W}from'node:fs'
 const[,,I='/input',O='/output']=process.argv,T:string[]=[]
-// pops push imm : opcodes (hex)
+// pops,pushes,imm:opcodes
 for(const g of'000:0,34 011:1 014:2 100:3,50,51,53 120:4 220:5 230:6 330:7 210:10,11,12,13,14,15,16,18,19,1a,1c,1d,1e,20,21,22 110:17,1b,40 002:30,33 102:31,32 200:41 010:52'.split(' ')){const[k,l]=g.split(':');for(const h of l.split(','))T[parseInt(h,16)]=k}
 function V(p:Uint8Array,q:Uint8Array):[number[],number]{
 const s=new Int32Array(257),m=new Int32Array(256),r:number[]=[],o:number[]=[],L=p.length
@@ -42,7 +42,7 @@ case 83:e=s[z-1]&255;break
 default:
 b=s[--z];a=s[z-1]
 if(!b&&k>18&&k<23){e=4;break}
-// Int32Array stores wrap to 32 bits; JS shifts already use the low 5 bits of the count
+// Int32Array wraps; shifts use count&31
 s[z-1]=k==16?a+b:k==17?a-b:k==18?Math.imul(a,b):k==19?a/b:k==20?a%b:k==21?(a>>>0)/(b>>>0):k==22?(a>>>0)%(b>>>0):k==24?a&b:k==25?a|b:k==26?a^b:k==28?a<<b:k==29?a>>b:k==30?a>>>b:k==32?+(a==b):k==33?+(a<b):+(a>>>0<b>>>0)}}
 return[o,e]}
 const f=(d:string,n:string)=>{try{return R(I+'/'+d+'/'+n+'.bin')}catch{return new Uint8Array}}
